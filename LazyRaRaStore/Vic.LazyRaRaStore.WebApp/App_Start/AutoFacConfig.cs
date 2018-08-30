@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Vic.LazyRaRaStore.Domain.Abstract;
+using Vic.LazyRaRaStore.Domain.Concrete;
 using Vic.LazyRaRaStore.Domain.Entities;
 using Vic.LazyRaRaStore.Domain.Mock;
 
@@ -32,7 +33,7 @@ namespace Vic.LazyRaRaStore.WebApp
             //#endregion
 
             #region mock class
-            builder.RegisterInstance<IProductsRepository>(new MockProductRepository());
+            builder.RegisterInstance<IProductsRepository>(new EFProductRepository());
             #endregion
 
             builder.RegisterControllers(AppDomain.CurrentDomain.GetAssemblies());
