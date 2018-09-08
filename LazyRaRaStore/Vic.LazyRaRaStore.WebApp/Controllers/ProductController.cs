@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Vic.LazyRaRaStore.Domain.Abstract;
+using Vic.LazyRaRaStore.WebApp.Models;
 
 namespace Vic.LazyRaRaStore.WebApp.Controllers
 {
@@ -17,14 +18,25 @@ namespace Vic.LazyRaRaStore.WebApp.Controllers
             this.repository = productRepository;
         }
 
-        public ViewResult List(int page = 1)
+        public ViewResult List(string category, int page = 1)
         {
-            return View(
-                repository
+            ProductsListViewModel model = new ProductsListViewModel
+            {
+                Products = repository
                 .Products
+                .Where (p => category == null || p.Category == category)
                 .OrderBy(p => p.ProductId)
-                .Skip((page - 1) * PageSize )
-                .Take(PageSize));
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = PageSize,
+                    TotalItems = repository.Products.Count()
+                },
+                CurrentCategory = category
+            };
+            return View(model);
         }
     }
 }
